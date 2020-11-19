@@ -7,7 +7,7 @@ import java.util.*;
 
 public class CorpusReader {
     
-    public Map<Integer, String> ReadFile() {
+    public Map<Integer, String> processData() {
         Map<Integer, String> data = new HashMap<>();
 
 
