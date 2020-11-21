@@ -10,15 +10,15 @@ import java.util.regex.Pattern;
 public class ImprovedTokenizer implements Tokenizer{
     private Set<String> stopWords;
     private SnowballStemmer stemmer = new porterStemmer();
-    private Pattern token_cleanse = Pattern.compile("^[a-z0-9]+(['@]?([a-z]){3,})+");
-    private Pattern repeated_chars = Pattern.compile("(.)\\1{2,}(?=\\1)");
+    private Pattern token_cleanse = Pattern.compile("^[a-z0-9]+(['\\@]?([a-z]){3,})+");
+    private Pattern repeated = Pattern.compile("((\\w+)]{2,})\\1$");
 
     public ImprovedTokenizer(String stop_words_filename) throws IOException {
         this.stopWords = new HashSet();
         BufferedReader br = new BufferedReader(new FileReader(stop_words_filename));
 
-        String line;
-        while((line = br.readLine()) != null){
+        String line = br.readLine();
+        while((line != null)){
             line = line.split(" ")[0];
             if(line.length()>0)
                 this.stopWords.add(line);
@@ -29,10 +29,7 @@ public class ImprovedTokenizer implements Tokenizer{
     public Map<String, List<Integer>> generateTokens(Map<Integer, String> data, int docId){
         Map<String, List<Integer>> tokens = new HashMap();
         int position = 0;
-        for(String item : this.repeated_chars
-                            .matcher(data.get(docId))
-                            .replaceAll("")
-                            .split("[.,!|/()?\\-\\s]+")){
+        for(String item : this.repeated.matcher(data.get(docId)).replaceAll("").split("[.,!|/()?\\-\\s]+")){
 
             if(!this.token_cleanse.matcher(item).matches() || stopWords.contains(item))
                 continue;

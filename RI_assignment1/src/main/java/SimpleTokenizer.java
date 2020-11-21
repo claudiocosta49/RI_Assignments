@@ -10,15 +10,15 @@ public class SimpleTokenizer implements Tokenizer{
         Map<String, List<Integer>> tokens = new HashMap();
         int pos = 0;
         for(String item : data.get(docId).split("\\s+")) {
-            item = item.toLowerCase()
-                    .replaceAll("[^A-Za-z0-9]", "");
+            item = item.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
 
             if(item.length()>3) {
                 if(!tokens.containsKey(item)){
                     tokens.put(item, new ArrayList<>());
                     
                 }
-                tokens.get(item).add(pos++);
+                pos += 1;
+                tokens.get(item).add(pos);
             }
         }
 
