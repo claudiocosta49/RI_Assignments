@@ -14,20 +14,23 @@ public class ImprovedTokenizer implements Tokenizer{
     private Pattern repeated = Pattern.compile("((\\w+)]{2,})\\1$");
 
     public ImprovedTokenizer(String stop_words_filename) throws IOException {
-        this.stopWords = new HashSet();
+        this.stopWords = new HashSet<>();
         BufferedReader br = new BufferedReader(new FileReader(stop_words_filename));
 
-        String line = br.readLine();
-        while((line != null)){
-            line = line.split(" ")[0];
+        String line;
+        while(br.readLine() != null){
+            line = br.readLine().split(" ")[0];
             if(line.length()>0)
                 this.stopWords.add(line);
         }
         br.close();
+   
     }
 
     public Map<String, List<Integer>> generateTokens(Map<Integer, String> data, int docId){
-        Map<String, List<Integer>> tokens = new HashMap();
+
+        Map<String, List<Integer>> tokens = new HashMap<String, List<Integer>>();
+
         int position = 0;
         for(String item : this.repeated.matcher(data.get(docId)).replaceAll("").split("[.,!|/()?\\-\\s]+")){
 

@@ -28,6 +28,7 @@ public class CorpusReader {
         } catch (IOException e) {
             System.err.println("ERROR: Cannot access to file properly!");
         }
+       
         return data;
     }
 }

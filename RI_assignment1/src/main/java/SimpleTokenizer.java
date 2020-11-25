@@ -6,8 +6,11 @@ import java.util.Map;
 
 public class SimpleTokenizer implements Tokenizer{
 
+    public SimpleTokenizer(){}
+
     public Map<String, List<Integer>> generateTokens(Map<Integer, String> data, int docId){
-        Map<String, List<Integer>> tokens = new HashMap();
+        
+        Map<String, List<Integer>> tokens = new HashMap<>();
         int pos = 0;
         for(String item : data.get(docId).split("\\s+")) {
             item = item.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
