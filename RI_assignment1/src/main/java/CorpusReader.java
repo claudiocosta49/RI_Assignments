@@ -26,7 +26,7 @@ public class CorpusReader {
                 }
             }
         } catch (IOException e) {
-            System.err.println("ERROR: Cannot access to file properly!");
+            System.err.println("ERROR: metadata file does not exist in root directory.");
         }
        
         return data;

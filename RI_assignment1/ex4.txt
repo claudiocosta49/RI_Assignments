@@ -1,0 +1,31 @@
+SimpleTokenizer
+
+a) What was the total indexing time and how much memory (roughly) is required to index this collection?
+Total Used Memory -> 326 MB
+Total Time -> 11 seconds
+
+b) What is your vocabulary size?
+Size of vocabulary: 4834974
+
+c) List the ten first terms (in alphabetic order) that appear in only one document (document frequency = 1).
+
+
+
+d) List the ten terms with highest document frequency.
+
+
+
+ImprovedTokenizer
+
+What was the total indexing time and how much memory (roughly) is required to index this collection?
+Total Used Memory -> 181 MB
+Total Time -> 9 seconds
+
+b) What is your vocabulary size?
+Size of vocabulary: 2084251
+
+c) List the ten first terms (in alphabetic order) that appear in only one document (document frequency = 1).
+
+
+
+d) List the ten terms with highest document frequency.
