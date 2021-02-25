@@ -37,7 +37,7 @@ public class CorpusReader {
             bodyText = bodyText + docNode.get("body_text").get(i).get("text");
             
         }
-        String content = title + " " + abstractText;
+        String content = title + " " + abstractText + " " + bodyText;
         
         doc.setContent(content.replace("\"", "").strip());
         docList.add(doc);

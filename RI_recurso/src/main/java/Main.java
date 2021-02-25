@@ -46,12 +46,13 @@ public class Main {
         File[] files = f.listFiles();
 
         Map<String, String> aux = new HashMap<String, String>();
-        for(int i = 0; i < 10; i++){                                 //testing for 10 docs
+        for(int i = 0; i < 100; i++){                                 //testing for 100 docs
             CorpusReader reader = new CorpusReader(files[i].getName(), docList);
             Document doc = reader.processData();
             aux.put(doc.getPaperId(), doc.getContent());
         }
-              
+        int N = docList.size();
+
 
         switch(tokenizerType){
             case "simple":
@@ -59,13 +60,15 @@ public class Main {
                 SimpleTokenizer simpleTokenizer = new SimpleTokenizer();
                 start = System.currentTimeMillis();
                 int blockNumber = 0;
+                
                 for(String key: aux.keySet()){
                     tokens = simpleTokenizer.generateTokens(aux, key);
-                    //System.out.println("--------------------------------------------------------");
-                    Iterator<Document> documentStream = docList.iterator();
-                    blockNumber++;
-                    Indexer indexer = new Indexer(65000, 65000, blockNumber, documentStream );
-                    indexer.index(tokens, key);     
+
+                    //Iterator<Document> documentStream = docList.iterator();
+                    
+                    Indexer indexer = new Indexer(2000, 650000, blockNumber, docList, N);
+                    indexer.index(tokens, key);
+                    blockNumber = indexer.getBlockNumber();    
                     vocabSize += indexer.getVocabSize();
                 }
                 
@@ -75,14 +78,12 @@ public class Main {
                 ImprovedTokenizer improvedTokenizer = new ImprovedTokenizer(stopWordsFileName);
                 start = System.currentTimeMillis();
                 blockNumber = 0;
-                for(Map.Entry<String,String> entry: aux.entrySet()){
-                    tokens = improvedTokenizer.generateTokens(aux, entry.getKey());
-                    //System.out.println(tokens);
-                    //System.out.println("--------------------------------------------------------");
-                    Iterator<Document> documentStream = docList.iterator();
-                    blockNumber++;
-                    Indexer indexer = new Indexer(2000, 650000, blockNumber, documentStream);
-                    indexer.index(tokens, entry.getKey());     
+                for(String key: aux.keySet()){
+                    tokens = improvedTokenizer.generateTokens(aux, key);
+                    Indexer indexer = new Indexer(2000, 650000, blockNumber, docList, N);
+                    indexer.index(tokens, key);
+                    blockNumber = indexer.getBlockNumber();
+                
                     vocabSize += indexer.getVocabSize();
                 }
                     

@@ -29,7 +29,6 @@ public class ImprovedTokenizer implements Tokenizer{
     public Map<String, List<Integer>> generateTokens(Map<String, String> data, String paperId) {
 
         Map<String, List<Integer>> tokens = new HashMap<String, List<Integer>>();
-
         int pos = 0;
         for( String item : (data.get(paperId)).split("[.,!|/()?\\-\\s]+")){  
 
