@@ -1,3 +1,7 @@
+/**
+* @author Cláudio Miguel Costa 85113
+* @author Ricardo Magalhães 79923
+*/
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

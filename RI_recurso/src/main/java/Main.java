@@ -1,3 +1,7 @@
+/**
+* @author Cláudio Miguel Costa 85113
+* @author Ricardo Magalhães 79923
+*/
 import java.io.IOException;
 import java.util.*;
 import java.io.File;
@@ -6,14 +10,13 @@ public class Main {
     public static void main(String[] args) throws IOException {
         Long start = null;
         int vocabSize = 0;
-        List<String> keysOrdered = new ArrayList<String>();
-        List<Document> docList = new ArrayList<Document>();
+        List<Document> docList = new ArrayList<Document>();                                             
         Map<String, List<Integer>> tokens = new HashMap<String, List<Integer>>();
-
+        HashMap<String, Double> termTf = new LinkedHashMap<>();
         
-        File folder = new File(".");
+        File folder = new File(".\\positionIndexes\\");
 
-        for (File file : folder.listFiles()) {                 //prevent file accumulation
+        for (File file : folder.listFiles()) {                 //delete partial indexes on every run
             if (file.getName().startsWith("block")) {
                 file.delete();
          }
@@ -42,48 +45,37 @@ public class Main {
         }
 
         
-        File f = new File("C:\\document_parses\\pdf_json\\");
+        File f = new File("C:\\document_parses\\pdf_json\\");   //please use location for the pdf_json directory and change it in CorpusReader.java as well
         File[] files = f.listFiles();
 
         Map<String, String> aux = new HashMap<String, String>();
-        for(int i = 0; i < 100; i++){                                 //testing for 100 docs
+        for(int i = 0; i < 100; i++){                                 //testing for 100 docs, change if needed
             CorpusReader reader = new CorpusReader(files[i].getName(), docList);
             Document doc = reader.processData();
             aux.put(doc.getPaperId(), doc.getContent());
         }
-        int N = docList.size();
-
+        int N = docList.size();                                         
+        start = System.currentTimeMillis();
 
         switch(tokenizerType){
             case "simple":
-                
                 SimpleTokenizer simpleTokenizer = new SimpleTokenizer();
-                start = System.currentTimeMillis();
-                int blockNumber = 0;
-                
+                int blockNumber = 0;               
                 for(String key: aux.keySet()){
-                    tokens = simpleTokenizer.generateTokens(aux, key);
-
-                    //Iterator<Document> documentStream = docList.iterator();
-                    
-                    Indexer indexer = new Indexer(2000, 650000, blockNumber, docList, N);
+                    tokens = simpleTokenizer.generateTokens(aux, key);                  
+                    Indexer indexer = new Indexer(650000, 650000, blockNumber, docList, N, termTf);
                     indexer.index(tokens, key);
                     blockNumber = indexer.getBlockNumber();    
                     vocabSize += indexer.getVocabSize();
                 }
-                
-               
-
             case "improved":
-                ImprovedTokenizer improvedTokenizer = new ImprovedTokenizer(stopWordsFileName);
-                start = System.currentTimeMillis();
+                ImprovedTokenizer improvedTokenizer = new ImprovedTokenizer(stopWordsFileName);    
                 blockNumber = 0;
                 for(String key: aux.keySet()){
                     tokens = improvedTokenizer.generateTokens(aux, key);
-                    Indexer indexer = new Indexer(2000, 650000, blockNumber, docList, N);
+                    Indexer indexer = new Indexer(650000, 650000, blockNumber, docList, N, termTf);
                     indexer.index(tokens, key);
                     blockNumber = indexer.getBlockNumber();
-                
                     vocabSize += indexer.getVocabSize();
                 }
                     
@@ -100,7 +92,7 @@ public class Main {
         
         String leftAlignFormat = "| %-20s | %-15s |%n";
         System.out.format("+---------------------+-------------------+%n");
-        System.out.format("|            "+ tokenizerType + "Tokenizer          |%n");
+        System.out.format("|      "+ tokenizerType + "Tokenizer with TF-IDF     |%n");
         System.out.format("+---------------------+-------------------+%n");
         
         System.out.format(leftAlignFormat, "Total Indexing Time", String.valueOf(total/1000) + " seconds");

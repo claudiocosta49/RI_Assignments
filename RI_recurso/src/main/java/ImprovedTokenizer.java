@@ -1,6 +1,9 @@
+/**
+* @author Cláudio Miguel Costa 85113
+* @author Ricardo Magalhães 79923
+*/
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.porterStemmer;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
